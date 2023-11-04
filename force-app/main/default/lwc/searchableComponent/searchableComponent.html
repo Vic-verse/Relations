@@ -1,0 +1,27 @@
+<template>
+    <lightning-card>
+        <lightning-layout>
+            <lightning-layout-item class="slds-align_absolute-center">         
+                <lightning-input 
+                    class="slds-m-left_x-small"
+                    type="search"  
+                    label="Object Name" 
+                    placeholder="Search Object"
+                    onchange={objectChangeHandler}>
+                </lightning-input>   
+            </lightning-layout-item>
+
+            <lightning-layout-item  class="slds-align_absolute-center">
+                <lightning-button
+                       type="Search" 
+                       icon-name="utility:search"
+                       icon-position="left"
+                       variant="brand"
+                       onclick={SearchHandler}
+                       label="Search">
+                   </lightning-button>   
+           </lightning-layout-item>
+        </lightning-layout>
+    </lightning-card>
+
+</template>

@@ -1,0 +1,32 @@
+<template>
+    <div>
+        <div class="div1 slds-box slds-scrollable slds-theme_shade slds-m-around_x-small slds-col slds-size_1-of-5" >
+            <ul>
+                <template for:each={fields} for:item="field" for:index="index">
+                    <div key={field.apiName}>
+                       <li lwc:if={field.isRelationField} >
+                        <a data-objname={field.relatedObject} onclick={openObj} data-field={field.apiName} data-index={index}>
+                            {field.label} >
+                        </a>
+                       </li> 
+                        <li lwc:else>
+                            <a data-field={field.apiName} onclick={selectField}  data-index={index}>
+                                {field.label} 
+                            </a>
+                        </li>
+                    </div>
+                </template>
+            </ul>
+        </div>
+        <template if:true={showInsertField}>
+            <div class="div2 slds-box slds-scrollable slds-theme_shade slds-m-around_x-small slds-col slds-size_1-of-5">
+                <lightning-button variant="brand" label="Insert Field" title="Primary action" onclick={handleClick} class="slds-m-top_x-small"></lightning-button>
+                <p>You have Selected : </p>
+                <p>{selectedLabelObject}</p>
+            </div>       
+        </template> 
+        <template if:true={openRelatedFields}>
+            <c-forth-Component fifthobject={selectedObjectname}></c-forth-Component>
+        </template>
+    </div>
+</template>
