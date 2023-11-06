@@ -13,6 +13,7 @@ export default class ThirdComponent extends LightningElement {
     showInsertField = false;
     selectedObjectname = '';
     @track selectedTagStyle = ''; 
+    type = '';
     @wire (getObjectFields, {objectName:'$thirdobjname'}) wiredgetObjectFields({data,error}){
         if (data) {
             this.fields = data;
@@ -49,9 +50,13 @@ export default class ThirdComponent extends LightningElement {
         const relatedAnchors = this.template.querySelectorAll(`[data-field="${dataField}"]`);
         relatedAnchors.forEach((relatedAnchor) => {
             relatedAnchor.classList.add('selectedTagStyle');
+
+            var str = String(`${this.firstobject}.${this.secobjname}.${this.thirdobjname}.${this.selectedField}`);
+            this.selectedLabelObject = str;
+            this.type = typeof this.selectedLabelObject;
         });
     }
-    handleClick() {this.selectedLabelObject = `${this.firstobject}.${this.secobjname}.${this.thirdobjname}.${this.selectedField}`;}
+    handleClick() {}
     applyTagStyle(anchor) {
         this.removeTagStyle(); 
         const relatedAnchors = this.template.querySelectorAll(`[data-objname="${this.selectedObjectname}"]`);

@@ -19,7 +19,7 @@ div{
     padding : 0px;
 }
 .div2{
-    width: 200px;
+    width: fit-content;
     height: 300px;
     float: left;
     display: flex; 

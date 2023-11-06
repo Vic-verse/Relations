@@ -6,4 +6,13 @@
     <lightningMessageFields>
         <fieldName>shareObjectName</fieldName>
     </lightningMessageFields>
+    <lightningMessageFields>
+        <fieldName>counter</fieldName>
+    </lightningMessageFields>
+    <lightningMessageFields>
+        <fieldName>mapValues</fieldName>
+    </lightningMessageFields>
+    <lightningMessageFields>
+        <fieldName>shareObjectName</fieldName>
+    </lightningMessageFields>
 </LightningMessageChannel>

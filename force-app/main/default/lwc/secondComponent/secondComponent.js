@@ -12,6 +12,7 @@ export default class SecondComponent extends LightningElement {
     selectedObjectname = '';
     @track selectedTagStyle = ''; 
     selectedLabelObject = '';
+    type = '';
     @wire (getObjectFields, {objectName:'$secobjname'}) wiredgetObjectFields({data,error}){
         if (data) {
             this.fields = data;
@@ -49,9 +50,13 @@ export default class SecondComponent extends LightningElement {
         const relatedAnchors = this.template.querySelectorAll(`[data-field="${dataField}"]`);
         relatedAnchors.forEach((relatedAnchor) => {
             relatedAnchor.classList.add('selectedTagStyle');
+            
+            var str = String(`${this.firstobject}.${this.secobjname}.${this.selectedField}`);
+            this.selectedLabelObject = str;
+            this.type = typeof this.selectedLabelObject;
         });
     }
-    handleClick() {this.selectedLabelObject = `${this.firstobject}.${this.secobjname}.${this.selectedField}`;}
+    handleClick() {}
     applyTagStyle(anchor) {
         this.removeTagStyle(); 
         const relatedAnchors = this.template.querySelectorAll(`[data-objname="${this.selectedObjectname}"]`);

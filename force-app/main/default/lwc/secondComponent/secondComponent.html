@@ -19,11 +19,13 @@
             </ul>
         </div>
         <template if:true={showInsertField}>
-            <div class="div2 slds-box slds-scrollable slds-theme_shade slds-m-around_x-small slds-col slds-size_1-of-5">
-                <lightning-button variant="brand" label="Insert Field" title="Primary action" onclick={handleClick} class="slds-m-top_x-small"></lightning-button>
+            <div class="slds-grid slds-grid_vertical div2 slds-align_absolute-center slds-box slds-scrollable slds-theme_shade slds-m-around_x-small slds-col slds-size_1-of-5">
                 <p>You have Selected : </p>
-                <p>{selectedLabelObject}</p>
-            </div>       
+                <p><b>{selectedLabelObject}</b></p>
+                </br>
+                <p>Type: {type}</p>
+                <lightning-button variant="brand" label="Insert Field" title="Primary action" onclick={handleClick} class="slds-m-top_x-small"></lightning-button>
+            </div>    
         </template> 
         <template if:true={openRelatedFields}>
             <c-third-Component thirdobjname={selectedObjectname} firstobject={firstobject} secobjname={secobjname}></c-third-Component>

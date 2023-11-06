@@ -14,6 +14,7 @@ export default class ForthComponent extends LightningElement {
     showInsertField = false;
     selectedObjectname = '';
     @track selectedTagStyle = ''; 
+    type = '';
     @wire (getObjectFields, {objectName:'$forthdobjname'}) wiredgetObjectFields({data,error}){
         if (data) {
             this.fields = data;
@@ -52,8 +53,13 @@ export default class ForthComponent extends LightningElement {
         relatedAnchors.forEach((relatedAnchor) => {
             relatedAnchor.classList.add('selectedTagStyle');
         });
+
+        var str = String(`${this.firstobject}.${this.secobjname}.${this.thirdobjname}.${this.forthdobjname}.${this.selectedField}`);
+        this.selectedLabelObject = str;
+        this.type = typeof this.selectedLabelObject;
     }
-    handleClick() {this.selectedLabelObject = `${this.firstobject}.${this.secobjname}.${this.thirdobjname}.${this.forthdobjname}.${this.selectedField}`;}
+    handleClick() {
+    }
     
     applyTagStyle(anchor) {
         this.removeTagStyle(); 

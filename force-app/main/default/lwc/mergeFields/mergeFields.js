@@ -13,6 +13,7 @@ export default class MergeFields extends LightningElement {
     subscription = null;
     selectedLabelObject = '';
     selectedField = '';
+    type = '';
     @wire(MessageContext) messageContext;
     connectedCallback() {
         this.subscribeToMessageChannel();
@@ -72,8 +73,14 @@ export default class MergeFields extends LightningElement {
         relatedAnchors.forEach((relatedAnchor) => {
             relatedAnchor.classList.add('selectedTagStyle');
         });
+
+        var str = String(`${this.objectName}.${this.selectedField}`);
+        this.selectedLabelObject = str;
+        this.type = typeof this.selectedLabelObject;
     }
-    handleClick(){this.selectedLabelObject=`${this.objectName}.${this.selectedField}`;}
+    handleClick() {
+        
+    }
     applyTagStyle(anchor) {
         this.removeTagStyle(); 
         const relatedAnchors = this.template.querySelectorAll(`[data-objname="${this.selectedObjectname}"]`);
