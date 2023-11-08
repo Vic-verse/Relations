@@ -15,4 +15,11 @@
     <lightningMessageFields>
         <fieldName>shareObjectName</fieldName>
     </lightningMessageFields>
+    <lightningMessageFields>
+        <fieldName>showPopup</fieldName>
+    </lightningMessageFields>
+    <lightningMessageFields>
+        <fieldName>describeResult</fieldName>
+    </lightningMessageFields>
+
 </LightningMessageChannel>

@@ -1,14 +1,18 @@
 <template>
-    <lightning-card>
-            <lightning-layout-item flexibility="auto">
-                <lightning-card title="Search Object">
-                    <c-searchable-Component></c-searchable-Component>
-                </lightning-card>
-            </lightning-layout-item>
-            <lightning-layout-item flexibility="auto">
-                <lightning-card title="Objects">
-                    <c-merge-Fields></c-merge-Fields>
-                </lightning-card>     
-            </lightning-layout-item>
-    </lightning-card>
+    <template if:true={isshowmodal}>
+        <div class="payment-modal-overlay">
+            <lightning-card>
+                <!-- <lightning-layout>
+                    <lightning-layout-item flexibility="auto">
+                        <c-searchable-Component></c-searchable-Component>
+                    </lightning-layout-item>
+                </lightning-layout> -->
+                <lightning-layout>
+                    <lightning-layout-item flexibility="auto" class="slds-scrollable_x slds-m-horizontal_medium" >
+                        <c-merge-Fields></c-merge-Fields>
+                    </lightning-layout-item>
+                </lightning-layout>
+            </lightning-card>
+        </div>
+    </template>
 </template>

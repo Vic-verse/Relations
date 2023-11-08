@@ -8,7 +8,10 @@ export default class SearchableComponent extends LightningElement {
         this.objName = event.detail.value;
     }
     SearchHandler() { 
-        const payload = {shareObjectName: this.objName};
+        const payload = {};
+        if (this.objName != undefined) {
+            payload = { shareObjectName: this.objName };
+        }
         publish(this.messageContext, Search_File, payload);
     }
 }

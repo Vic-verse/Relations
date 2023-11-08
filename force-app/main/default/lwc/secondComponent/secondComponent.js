@@ -1,5 +1,7 @@
 import { LightningElement, api, track, wire } from 'lwc';
 import getObjectFields from '@salesforce/apex/FieldController.getObjectFields';
+import {publish, subscribe, MessageContext } from 'lightning/messageService';
+import Search_File from '@salesforce/messageChannel/messagingChannel__c';
 export default class SecondComponent extends LightningElement {
     @api secobjname;
     @api firstobject;
@@ -13,11 +15,13 @@ export default class SecondComponent extends LightningElement {
     @track selectedTagStyle = ''; 
     selectedLabelObject = '';
     type = '';
+    @wire(MessageContext) messageContext;
+
     @wire (getObjectFields, {objectName:'$secobjname'}) wiredgetObjectFields({data,error}){
         if (data) {
             this.fields = data;
         } else if (error) {
-        console.error(error);
+        // console.error(error);
         }
     }
     openObj(event) {
@@ -39,7 +43,7 @@ export default class SecondComponent extends LightningElement {
         this.openRelatedFields = false;
         let index = event.target.dataset.index;
         let selectedfld = event.target.dataset.field;
-        console.error('Selected Field selectedfld: ' + selectedfld);
+        // console.error('Selected Field selectedfld: ' + selectedfld);
         if (selectedfld.toLowerCase().endsWith('__c')) {
             selectedfld = selectedfld.replace(/__c$/, '__r');
         }
@@ -56,7 +60,15 @@ export default class SecondComponent extends LightningElement {
             this.type = typeof this.selectedLabelObject;
         });
     }
-    handleClick() {}
+    handleClick() {
+        let showPopUp = false;
+        let result = `{!${this.firstobject}.${this.secobjname}.${this.selectedField}}`;
+        const payload = {
+            describeResult: result,
+            showPopup: showPopUp,
+        };        
+        publish(this.messageContext, Search_File, payload);
+    }
     applyTagStyle(anchor) {
         this.removeTagStyle(); 
         const relatedAnchors = this.template.querySelectorAll(`[data-objname="${this.selectedObjectname}"]`);

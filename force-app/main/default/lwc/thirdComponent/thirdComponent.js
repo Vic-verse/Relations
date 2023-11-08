@@ -1,5 +1,7 @@
 import { LightningElement, track, api, wire } from 'lwc';
 import getObjectFields from '@salesforce/apex/FieldController.getObjectFields';
+import {publish, subscribe, MessageContext } from 'lightning/messageService';
+import Search_File from '@salesforce/messageChannel/messagingChannel__c';
 export default class ThirdComponent extends LightningElement {
     @api thirdobjname;
     @track fields;
@@ -14,11 +16,12 @@ export default class ThirdComponent extends LightningElement {
     selectedObjectname = '';
     @track selectedTagStyle = ''; 
     type = '';
+    @wire(MessageContext) messageContext;
     @wire (getObjectFields, {objectName:'$thirdobjname'}) wiredgetObjectFields({data,error}){
         if (data) {
             this.fields = data;
         } else if (error) {
-        console.error(error);
+        // console.error(error);
         }
     }
     openObj(event) {
@@ -56,7 +59,15 @@ export default class ThirdComponent extends LightningElement {
             this.type = typeof this.selectedLabelObject;
         });
     }
-    handleClick() {}
+    handleClick() {
+        let showPopUp = false;
+        let result = `{!${this.firstobject}.${this.secobjname}.${this.thirdobjname}.${this.selectedField}}`;
+        const payload = {
+            describeResult: result,
+            showPopup: showPopUp,
+        };
+        publish(this.messageContext, Search_File, payload);
+    }
     applyTagStyle(anchor) {
         this.removeTagStyle(); 
         const relatedAnchors = this.template.querySelectorAll(`[data-objname="${this.selectedObjectname}"]`);

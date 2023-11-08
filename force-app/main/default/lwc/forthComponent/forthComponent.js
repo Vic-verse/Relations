@@ -1,5 +1,7 @@
 import { LightningElement, api, track, wire } from 'lwc';
 import getObjectFields from '@salesforce/apex/FieldController.getObjectFields';
+import {publish, subscribe, MessageContext } from 'lightning/messageService';
+import Search_File from '@salesforce/messageChannel/messagingChannel__c';
 export default class ForthComponent extends LightningElement {
     @api forthdobjname;
     @api thirdobjname;
@@ -15,6 +17,8 @@ export default class ForthComponent extends LightningElement {
     selectedObjectname = '';
     @track selectedTagStyle = ''; 
     type = '';
+    finalResult = '';
+    @wire(MessageContext) messageContext;
     @wire (getObjectFields, {objectName:'$forthdobjname'}) wiredgetObjectFields({data,error}){
         if (data) {
             this.fields = data;
@@ -43,7 +47,6 @@ export default class ForthComponent extends LightningElement {
         let selectedfld = event.target.dataset.field;
         if (selectedfld.toLowerCase().endsWith('__c')) {
             selectedfld = selectedfld.replace(/__c$/, '__r');
-            console.log('Replace field : '+selectedfld);
         }
         this.selectedFieldTmp = selectedfld;
         this.removeTagStyle();
@@ -59,8 +62,14 @@ export default class ForthComponent extends LightningElement {
         this.type = typeof this.selectedLabelObject;
     }
     handleClick() {
+        let showPopUp = false;
+        let result = `{!${this.firstobject}.${this.secobjname}.${this.thirdobjname}.${this.forthdobjname}.${this.selectedField}}`;
+        const payload = {
+            describeResult: result,
+            showPopup: showPopUp,
+        };
+        publish(this.messageContext, Search_File, payload);
     }
-    
     applyTagStyle(anchor) {
         this.removeTagStyle(); 
         const relatedAnchors = this.template.querySelectorAll(`[data-objname="${this.selectedObjectname}"]`);

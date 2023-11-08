@@ -1,9 +1,9 @@
 import { LightningElement, api, track, wire } from 'lwc';
-import {subscribe, MessageContext } from 'lightning/messageService';
+import {publish, subscribe, MessageContext } from 'lightning/messageService';
 import Search_File from '@salesforce/messageChannel/messagingChannel__c';
 import getObjectFields from '@salesforce/apex/FieldController.getObjectFields';
 export default class MergeFields extends LightningElement {
-    @api objectName;
+    @api objectName = 'Contact';
     @track fields;
     @track selectedFieldTmp = '';
     openRelatedFields = false;
@@ -16,29 +16,17 @@ export default class MergeFields extends LightningElement {
     type = '';
     @wire(MessageContext) messageContext;
     connectedCallback() {
-        this.subscribeToMessageChannel();
-    }
-    subscribeToMessageChannel()
-    { 
-        this.subscription = subscribe(
-            this.messageContext,
-            Search_File,
-            (message) => this.handleMessage(message)
-        );
-    }
-    handleMessage(message) { 
-        this.objectName = message.shareObjectName;
         this.fetchObjects();
     }
+
     fetchObjects() { 
        getObjectFields({ objectName: this.objectName })
         .then(result => {
             this.fields = result;
-            console.log('Fields:', this.fields);
             this.incrementCount();
         })
         .catch(error => {
-            console.error('Error fetching fields: ' + JSON.stringify(error));
+            // console.error('Error fetching fields: ' + JSON.stringify(error));
         });
     }
     openObj(event) {
@@ -79,7 +67,13 @@ export default class MergeFields extends LightningElement {
         this.type = typeof this.selectedLabelObject;
     }
     handleClick() {
-        
+        let showPopUp = false;
+        let result = `{!${this.objectName}.${this.selectedField}}`;
+        const payload = {
+            describeResult: result,
+            showPopup: showPopUp,
+        };
+        publish(this.messageContext, Search_File, payload);
     }
     applyTagStyle(anchor) {
         this.removeTagStyle(); 
