@@ -2,8 +2,12 @@ import { LightningElement, api, track, wire } from 'lwc';
 import {publish, subscribe, MessageContext } from 'lightning/messageService';
 import Search_File from '@salesforce/messageChannel/messagingChannel__c';
 import getObjectFields from '@salesforce/apex/FieldController.getObjectFields';
+import getObject from '@salesforce/apex/getObjects.getAllObjects';
 export default class MergeFields extends LightningElement {
-    @api objectName = 'Contact';
+    @api objectName = '';
+    isObjectsAvailable = false;
+    isFieldsAvailable = false;
+    allObjects = [];
     @track fields;
     @track selectedFieldTmp = '';
     openRelatedFields = false;
@@ -15,20 +19,44 @@ export default class MergeFields extends LightningElement {
     selectedField = '';
     type = '';
     @wire(MessageContext) messageContext;
-    connectedCallback() {
-        this.fetchObjects();
+    connectedCallback() {}
+
+    handleSearch(event) { 
+        let obj;
+        obj = event.target.value;
+        this.isFieldsAvailable = false;
+        this.selectedObjectname = null;
+        this.fetchObjects(obj);
     }
 
-    fetchObjects() { 
-       getObjectFields({ objectName: this.objectName })
+    fetchObjects(objectName) { 
+       getObject({ partialObjectType: objectName })
         .then(result => {
-            this.fields = result;
-            this.incrementCount();
+            this.allObjects = result;
+            this.isObjectsAvailable = this.allObjects.length > 0 ? true : false;
         })
         .catch(error => {
             // console.error('Error fetching fields: ' + JSON.stringify(error));
         });
     }
+
+    handleObj(event) { 
+        this.objectName = event.target.dataset.object;
+        this.isObjectsAvailable = false;
+        this.fetchFields(this.objectName); 
+    }
+    
+    fetchFields(obj) {
+        getObjectFields({ objectName: obj })
+        .then(result => {
+            this.fields = result;
+            this.isFieldsAvailable = this.fields.length > 0 ? true : false;
+        })
+        .catch(error => {
+            // console.error('Error fetching fields: ' + JSON.stringify(error));
+        });        
+    }
+    
     openObj(event) {
         let objName = event.target.dataset.objname;
         let index = event.target.dataset.index;
